@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">Picture</string>
+    <string name="login_tittle">途相登陆</string>
+    <string name="register_tittle">途相注册</string>
+    <string name="user">用户名:</string>
+    <string name="password">密码:</string>
+    <string name="repassword">再次输入密码:</string>
+    <string name="login">登陆</string>
+    <string name="no_login">未登陆</string>
+    <string name="register">注册</string>
+    <string name="register_comming">还未注册?进入注册</string>
+    <string name="register_success">注册成功</string>
+    <string name="register_fail">注册失败</string>
+    <string name="setting">设置</string>
+    <string name="userprofile">个人中心</string>
+    <string name="update">更新</string>
+    <string name="logoff">注销</string>
+    <string name="welcome">欢迎</string>
+    <string name="points">积分:</string>
+    <string name="label">书签:书山有路勤为径,学海无涯苦作舟!!!</string>
+    <string name="photos">相册</string>
+    <string name="login_success">登陆成功</string>
+    <string name="login_fail">登陆失败</string>
+    <string name="function_not_imp">该功能还未实现！</string>
+    <string name="latest_version">当前已经是最新版本！</string>
+    <string name="logoff_success">成功注销该用户！</string>
+    <string name="user_or_pass_is_null">用户名或者密码为空！</string>
+    <string name="user_exsited">该用户已经存在无需注册！</string>
+    <string name="loading">正在加载中...</string>
+
+    <string name="home">首页</string>
+    <string name="knowledge_system">体系</string>
+    <string name="navigation">导航</string>
+    <string name="project">项目</string>
+    <string name="wechat">公众号</string>
+
+    <string name="home_fail">获取首页信息失败</string>
+    <string name="knowledge_system_fail">获取体系信息失败</string>
+    <string name="navigation_fail">获取导航信息失败</string>
+    <string name="project_fail">获取项目信息失败</string>
+    <string name="nickname">昵称:</string>
+    <string name="email">邮箱:</string>
+    <string name="usericon">用户头像:</string>
+    <string name="admin">管理员:</string>
+    <string name="coincount">总积分:</string>
+    <string name="coinlevel">等级:</string>
+    <string name="coinrank">排名:</string>
+    <string name="userinfo">用户信息</string>
+    <string name="coininfo">积分信息</string>
+
+    <!-- no data-->
+    <string name="no_data_text">加载失败,请检查网络后重试~</string>
+    <string name="no_data_retry">重试</string>
+</resources>

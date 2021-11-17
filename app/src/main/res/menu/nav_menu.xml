@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single" />
+
+    <item
+        android:id="@+id/nav_setting"
+        android:icon="@drawable/ic_setting_24dp"
+        android:title="@string/setting" />
+
+    <item
+        android:id="@+id/nav_userprofile"
+        android:icon="@drawable/ic_todo_default_24dp"
+        android:title="@string/userprofile" />
+
+
+    <item
+        android:id="@+id/nav_update"
+        android:icon="@drawable/ic_share_white_24dp"
+        android:title="@string/update" />
+
+
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/ic_logout_white_24dp"
+        android:title="@string/logoff" />
+
+</menu>

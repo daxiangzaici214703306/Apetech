@@ -22,4 +22,9 @@ public interface IHomeViewModel {
      * @param num 第几页
      */
     void requestProjectData(int num);
+
+    /**
+     * 请求Banner数据
+     */
+    void requestBannerData();
 }

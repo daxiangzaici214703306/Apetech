@@ -1,5 +1,6 @@
 package com.hsns.base.listener;
 
+import com.hsns.base.bean.BannerInfo;
 import com.hsns.base.bean.HierarchyInfo;
 import com.hsns.base.bean.HomeInfo;
 import com.hsns.base.bean.NaviInfo;
@@ -26,4 +27,10 @@ public interface HomeDataCallback {
      * @param mProjectInfo 数据对象
      */
     void onProjectDataCallback(ProjectInfo mProjectInfo);
+
+    /**
+     * 请求Banner数据回调
+     * @param info Banner数据
+     */
+    void onBannerDataCallback(BannerInfo info);
 }

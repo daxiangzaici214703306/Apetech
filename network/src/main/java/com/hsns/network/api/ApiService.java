@@ -1,5 +1,6 @@
 package com.hsns.network.api;
 
+import com.hsns.base.bean.BannerInfo;
 import com.hsns.base.bean.BaseBean;
 import com.hsns.base.bean.HierarchyInfo;
 import com.hsns.base.bean.HomeInfo;
@@ -90,4 +91,13 @@ public interface ApiService {
      */
     @GET("user/logout/json")
     Observable<BaseBean<Object>> getLogoutInfo();
+
+
+    /**
+     * 获取Banner数据
+     * @return Banner数据
+     */
+    @GET("banner/json")
+    Observable<BannerInfo> getBannerInfo();
+
 }

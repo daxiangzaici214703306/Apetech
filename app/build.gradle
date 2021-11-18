@@ -61,4 +61,6 @@ dependencies {
     implementation 'com.wuxiaolong.pullloadmorerecyclerview:library:1.0.4'
     implementation 'com.just.agentweb:agentweb:4.0.2'
 //    implementation 'com.download.library:Downloader:4.1.3'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
+    implementation 'cn.bingoogolapple:bga-banner:2.2.4@aar'
 }

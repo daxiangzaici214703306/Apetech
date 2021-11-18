@@ -29,4 +29,9 @@ public class HomeModel implements IHomeModel {
     public void requestProjectData(int page) {
         HttpManager.getInstance(PictureApplication.getApplication()).requestProjectInfo(page,mHomeDataCallback);
     }
+
+    @Override
+    public void requestBannerData() {
+        HttpManager.getInstance(PictureApplication.getApplication()).requestBannerData(mHomeDataCallback);
+    }
 }

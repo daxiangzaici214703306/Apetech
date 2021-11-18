@@ -1,31 +1,20 @@
 package com.hsns.picture.home.view;
 
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.hsns.base.bean.HierarchyInfo;
 import com.hsns.base.bean.NaviInfo;
-import com.hsns.base.utils.ToastUtils;
-import com.hsns.base.view.BaseFragment;
-import com.hsns.picture.R;
-import com.hsns.picture.databinding.FragmentHomeBinding;
-import com.hsns.picture.home.adapter.HierarchyAdapter;
-import com.hsns.picture.home.adapter.HomeAdapter;
 import com.hsns.picture.home.adapter.NaviAdapter;
-import com.hsns.picture.home.viewmodel.HomeViewModel;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NaviFragment extends BaseHomeFragment implements PullLoadMoreRecyclerView.PullLoadMoreListener, HomeAdapter.onItemClickListener {
+public class NaviFragment extends BaseHomeFragment implements PullLoadMoreRecyclerView.PullLoadMoreListener, NaviAdapter.onItemClickListener {
     private NaviAdapter mNaviAdapter;
     private List<NaviInfo.Data> mNaviDatas;
     private static final String TAG = "NaviFragment";

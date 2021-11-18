@@ -14,14 +14,13 @@ import com.hsns.base.utils.UiUtils;
 import com.hsns.picture.main.view.MainActivity;
 import com.hsns.picture.PictureApplication;
 import com.hsns.picture.R;
-import com.hsns.picture.home.adapter.HomeAdapter;
 import com.hsns.picture.home.adapter.ProjectAdapter;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectFragment extends BaseHomeFragment implements PullLoadMoreRecyclerView.PullLoadMoreListener, HomeAdapter.onItemClickListener {
+public class ProjectFragment extends BaseHomeFragment implements PullLoadMoreRecyclerView.PullLoadMoreListener, ProjectAdapter.onItemClickListener {
     private ProjectAdapter mProjectAdapter;
     private List<ProjectInfo.Datas> mProjectDatas;
     private int num = 0;//当前文章加载的页数

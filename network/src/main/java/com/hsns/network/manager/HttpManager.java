@@ -1,8 +1,8 @@
 package com.hsns.network.manager;
 
 import android.content.Context;
-import android.util.Log;
 
+import com.hsns.base.bean.BannerInfo;
 import com.hsns.base.bean.BaseBean;
 import com.hsns.base.bean.HierarchyInfo;
 import com.hsns.base.bean.HomeInfo;
@@ -212,6 +212,22 @@ public class HttpManager {
 
 
     /**
+     * 请求Banner数据
+     *
+     * @param mHomeDataCallback 数据回调
+     */
+    public synchronized void requestBannerData(final HomeDataCallback mHomeDataCallback) {
+        new BaseRequset<BannerInfo>().requestNet(service.getBannerInfo(), new BaseRequset.BaseListener<BannerInfo>() {
+            @Override
+            public void onResult(BannerInfo mBannerInfo) {
+                if (mHomeDataCallback != null) {
+                    mHomeDataCallback.onBannerDataCallback(mBannerInfo);
+                }
+            }
+        });
+    }
+
+    /**
      * 退出登陆请求
      * @param mLogOutCallback 数据回调
      */
@@ -225,5 +241,6 @@ public class HttpManager {
             }
         });
     }
+
 
 }

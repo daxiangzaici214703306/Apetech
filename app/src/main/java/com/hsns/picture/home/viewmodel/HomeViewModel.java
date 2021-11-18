@@ -3,6 +3,7 @@ package com.hsns.picture.home.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.hsns.base.bean.BannerInfo;
 import com.hsns.base.bean.HierarchyInfo;
 import com.hsns.base.bean.HomeInfo;
 import com.hsns.base.bean.NaviInfo;
@@ -20,6 +21,12 @@ public class HomeViewModel extends ViewModel implements IHomeViewModel, HomeData
     private MutableLiveData<NaviInfo> naviInfos = new MutableLiveData<>();
     //项目数据
     private MutableLiveData<ProjectInfo> projectInfos = new MutableLiveData<>();
+    //Banner数据
+    private MutableLiveData<BannerInfo> bannerInfos = new MutableLiveData<>();
+
+    public MutableLiveData<BannerInfo> getBannerInfos() {
+        return bannerInfos;
+    }
 
     public MutableLiveData<NaviInfo> getNaviInfos() {
         return naviInfos;
@@ -62,6 +69,11 @@ public class HomeViewModel extends ViewModel implements IHomeViewModel, HomeData
     }
 
     @Override
+    public void requestBannerData() {
+        mHomeModel.requestBannerData();
+    }
+
+    @Override
     public void onHomeDataCallback(HomeInfo mHomeInfo) {
         homeInfos.postValue(mHomeInfo);
     }
@@ -79,5 +91,10 @@ public class HomeViewModel extends ViewModel implements IHomeViewModel, HomeData
     @Override
     public void onProjectDataCallback(ProjectInfo mProjectInfo) {
         projectInfos.postValue(mProjectInfo);
+    }
+
+    @Override
+    public void onBannerDataCallback(BannerInfo info) {
+        bannerInfos.postValue(info);
     }
 }

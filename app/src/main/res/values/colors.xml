@@ -5,4 +5,5 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="Blue_Grey">#607d8b</color>
     <color name="textColorPrimary">#616161</color>
+    <color name="color_title_bg">#CCFFFFFF</color>
 </resources>

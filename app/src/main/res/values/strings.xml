@@ -48,6 +48,9 @@
     <string name="coinrank">排名:</string>
     <string name="userinfo">用户信息</string>
     <string name="coininfo">积分信息</string>
+    <string name="coin_list">积分排名</string>
+    <string name="coming_coin_list">进入积分排名>></string>
+    <string name="coming_my_coin_list">个入积分变化</string>
 
     <!-- no data-->
     <string name="no_data_text">加载失败,请检查网络后重试~</string>

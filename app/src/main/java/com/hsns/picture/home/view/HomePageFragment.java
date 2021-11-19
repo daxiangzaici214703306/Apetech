@@ -1,6 +1,5 @@
 package com.hsns.picture.home.view;
 
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.hsns.base.bean.BannerInfo;
-import com.hsns.base.bean.BaseBean;
 import com.hsns.base.bean.HomeInfo;
 import com.hsns.base.manager.PageChangeManger;
 import com.hsns.base.utils.BaseUtils;
@@ -29,14 +27,13 @@ import com.hsns.picture.PictureApplication;
 import com.hsns.picture.R;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.bingoogolapple.bgabanner.BGABanner;
 
 public class HomePageFragment extends BaseHomeFragment implements PullLoadMoreRecyclerView.PullLoadMoreListener,
-        OnItemClickListener, BGABanner.Delegate, BGABanner.Adapter<ImageView, String> {
+        OnItemClickListener, BGABanner.Delegate, BGABanner.Adapter<ImageView, String>, Runnable {
     private HomePageAdapter mHomeAdapter;
     private List<HomeInfo.Datas> mHomeDatas;
     private int num = 0;//当前文章加载的页数
@@ -50,26 +47,41 @@ public class HomePageFragment extends BaseHomeFragment implements PullLoadMoreRe
         super.initView(inflater, container);
         setHomeDataListener();
         setBannerDataListenr();
-        bannerLayout = LayoutInflater.from(getActivity()).inflate(R.layout.item_home_banner, null);
-        banner = bannerLayout.findViewById(R.id.banner);
-        banner.setDelegate(this);
-        bannerInfos = new ArrayList<>();
-        mHomeDatas = new ArrayList<>();
-        mHomeAdapter = new HomePageAdapter(mHomeDatas);
-        mHomeAdapter.addHeaderView(bannerLayout);
+        initBanner();
+        initAdapter();
+        rySetting();
+
+    }
+
+    /**
+     * RecyclerView相关设置
+     */
+    private void rySetting() {
         homeBinding.homeRy.setLinearLayout();
         homeBinding.homeRy.setAdapter(mHomeAdapter);
         homeBinding.homeRy.setFooterViewText(PictureApplication.getApplication().getString(R.string.loading));
-        mHomeAdapter.setOnItemClickListener(this);
         homeBinding.homeRy.setOnPullLoadMoreListener(this);
-        homeBinding.homeRy.post(new Runnable() {
-            @Override
-            public void run() {
-                homeBinding.loading.setVisibility(View.VISIBLE);
-                mHomeViewModel.requestBannerData();
-                mHomeViewModel.requestWhichPageData(num);
-            }
-        });
+        homeBinding.homeRy.post(this);
+    }
+
+    /**
+     * 初始化Adapter
+     */
+    private void initAdapter() {
+        mHomeDatas = new ArrayList<>();
+        mHomeAdapter = new HomePageAdapter(mHomeDatas);
+        mHomeAdapter.addHeaderView(bannerLayout);
+        mHomeAdapter.setOnItemClickListener(this);
+    }
+
+    /**
+     * 初始化Banner
+     */
+    private void initBanner() {
+        bannerInfos = new ArrayList<>();
+        bannerLayout = LayoutInflater.from(getActivity()).inflate(R.layout.item_home_banner, null);
+        banner = bannerLayout.findViewById(R.id.banner);
+        banner.setDelegate(this);
     }
 
     /**
@@ -79,7 +91,7 @@ public class HomePageFragment extends BaseHomeFragment implements PullLoadMoreRe
         mHomeViewModel.getBannerInfos().observe(this, new Observer<BannerInfo>() {
             @Override
             public void onChanged(BannerInfo bannerInfo) {
-                Log.d(TAG, "bannerInfo==>" + bannerInfo != null ? bannerInfo.toString() : "");
+                Log.d(TAG, "bannerInfo==>" + bannerInfo);
                 if (bannerInfo != null && bannerInfo.getData() != null && bannerInfo.getData().size() != 0) {
                     bannerInfos.clear();
                     bannerInfos.addAll(bannerInfo.getData());
@@ -113,16 +125,16 @@ public class HomePageFragment extends BaseHomeFragment implements PullLoadMoreRe
             @Override
             public void onChanged(HomeInfo homeInfo) {
                 homeBinding.loading.setVisibility(View.GONE);
-                if (homeInfo == null) {
+                homeBinding.homeRy.setVisibility(View.VISIBLE);
+                homeBinding.homeRy.setPullLoadMoreCompleted();
+                if (homeInfo != null) {
+                    Log.d(TAG, "homeInfo==>" + homeInfo);
+                    if (homeInfo.getData() != null && homeInfo.getData().getDatas() != null) {
+                        mHomeDatas.addAll(homeInfo.getData().getDatas());
+                        mHomeAdapter.notifyDataSetChanged();
+                    }
+                } else {
                     noDataUiSetting();
-                    return;
-                }
-                Log.d(TAG, "homeInfo==>" + homeInfo.toString());
-                if (homeInfo != null && homeInfo.getData() != null && homeInfo.getData().getDatas() != null) {
-                    homeBinding.homeRy.setVisibility(View.VISIBLE);
-                    homeBinding.homeRy.setPullLoadMoreCompleted();
-                    mHomeDatas.addAll(homeInfo.getData().getDatas());
-                    mHomeAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -133,15 +145,17 @@ public class HomePageFragment extends BaseHomeFragment implements PullLoadMoreRe
      * 没有数据时候的ui设置
      */
     private void noDataUiSetting() {
-        mNoDataView.setVisible(true);
-        homeBinding.homeRy.setVisibility(View.GONE);
-        homeBinding.homeRy.setPullLoadMoreCompleted();
+        if (mHomeDatas.size() == 0) {
+            mNoDataView.setVisible(true);
+            homeBinding.homeRy.setVisibility(View.GONE);
+        }
     }
 
 
     @Override
     public void onRefresh() {
         super.onRefresh();
+        mHomeViewModel.requestBannerData();
     }
 
     @Override
@@ -157,13 +171,16 @@ public class HomePageFragment extends BaseHomeFragment implements PullLoadMoreRe
         num = 0;
         mHomeDatas.clear();
         homeBinding.homeRy.setOnPullLoadMoreListener(null);
+        homeBinding.homeRy.removeCallbacks(this);
     }
 
     @Override
     public void onNoDataClickCallBackByBaseHome() {
         mNoDataView.setVisible(false);
         homeBinding.loading.setVisibility(View.VISIBLE);
+        homeBinding.homeRy.setVisibility(View.GONE);
         mHomeViewModel.requestWhichPageData(num);
+        mHomeViewModel.requestBannerData();
     }
 
     @Override
@@ -193,5 +210,13 @@ public class HomePageFragment extends BaseHomeFragment implements PullLoadMoreRe
                 .priority(Priority.HIGH)
                 .diskCacheStrategy(DiskCacheStrategy.NONE);
         Glide.with(getActivity()).load(feedImageUrl).apply(options).into(imageView);
+    }
+
+    @Override
+    public void run() {
+        homeBinding.loading.setVisibility(View.VISIBLE);
+        homeBinding.homeRy.setVisibility(View.GONE);
+        mHomeViewModel.requestBannerData();
+        mHomeViewModel.requestWhichPageData(num);
     }
 }

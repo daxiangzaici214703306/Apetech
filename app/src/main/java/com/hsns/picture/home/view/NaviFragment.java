@@ -55,7 +55,7 @@ public class NaviFragment extends BaseHomeFragment implements PullLoadMoreRecycl
                     homeBinding.homeRy.setPullLoadMoreCompleted();
                     return;
                 }
-                Log.d(TAG, "naviInfo==>" + naviInfo.toString());
+                Log.d(TAG, "naviInfo==>" + naviInfo);
                 if (naviInfo != null && naviInfo.getData() != null) {
                     homeBinding.homeRy.setVisibility(View.VISIBLE);
                     homeBinding.homeRy.setPullLoadMoreCompleted();

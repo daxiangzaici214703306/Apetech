@@ -55,7 +55,7 @@ public class HierarchyFragment extends BaseHomeFragment implements PullLoadMoreR
                     homeBinding.homeRy.setPullLoadMoreCompleted();
                     return;
                 }
-                Log.d(TAG, "hierarchyInfo==>" + hierarchyInfo.toString());
+                Log.d(TAG, "hierarchyInfo==>" + hierarchyInfo);
                 if (hierarchyInfo != null && hierarchyInfo.getData() != null) {
                     homeBinding.homeRy.setVisibility(View.VISIBLE);
                     homeBinding.homeRy.setPullLoadMoreCompleted();

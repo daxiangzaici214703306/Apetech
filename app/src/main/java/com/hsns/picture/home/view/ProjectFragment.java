@@ -20,7 +20,8 @@ import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectFragment extends BaseHomeFragment implements PullLoadMoreRecyclerView.PullLoadMoreListener, ProjectAdapter.onItemClickListener {
+public class ProjectFragment extends BaseHomeFragment implements PullLoadMoreRecyclerView.PullLoadMoreListener,
+        ProjectAdapter.onItemClickListener, Runnable {
     private ProjectAdapter mProjectAdapter;
     private List<ProjectInfo.Datas> mProjectDatas;
     private int num = 0;//当前文章加载的页数
@@ -29,22 +30,31 @@ public class ProjectFragment extends BaseHomeFragment implements PullLoadMoreRec
 
     @Override
     public void initView(LayoutInflater inflater, ViewGroup container) {
-        super.initView(inflater,container);
+        super.initView(inflater, container);
         setProjectDataListener();
-        mProjectDatas = new ArrayList<>();
-        mProjectAdapter = new ProjectAdapter(mProjectDatas, homeBinding.homeRy.getContext());
+        initAdapter();
+        rySetting();
+
+    }
+
+    /**
+     * RecyclerView的设置
+     */
+    private void rySetting() {
         homeBinding.homeRy.setLinearLayout();
         homeBinding.homeRy.setAdapter(mProjectAdapter);
         homeBinding.homeRy.setFooterViewText(PictureApplication.getApplication().getString(R.string.loading));
-        mProjectAdapter.setChildItemClickListener(this);
         homeBinding.homeRy.setOnPullLoadMoreListener(this);
-        homeBinding.homeRy.post(new Runnable() {
-            @Override
-            public void run() {
-                homeBinding.loading.setVisibility(View.VISIBLE);
-                mHomeViewModel.requestProjectData(num);
-            }
-        });
+        homeBinding.homeRy.post(this);
+    }
+
+    /**
+     * 初始化Adapter
+     */
+    private void initAdapter() {
+        mProjectDatas = new ArrayList<>();
+        mProjectAdapter = new ProjectAdapter(mProjectDatas, homeBinding.homeRy.getContext());
+        mProjectAdapter.setChildItemClickListener(this);
     }
 
     /**
@@ -55,21 +65,30 @@ public class ProjectFragment extends BaseHomeFragment implements PullLoadMoreRec
             @Override
             public void onChanged(ProjectInfo projectInfo) {
                 homeBinding.loading.setVisibility(View.GONE);
-                if(projectInfo==null) {
-                    setNoDataViewVisible(true);
-                    homeBinding.homeRy.setVisibility(View.GONE);
-                    homeBinding.homeRy.setPullLoadMoreCompleted();
+                homeBinding.homeRy.setVisibility(View.VISIBLE);
+                homeBinding.homeRy.setPullLoadMoreCompleted();
+                if (projectInfo == null) {
+                    noDataUiSetting();
                     return;
                 }
-                Log.d(TAG, "projectInfo==>" + projectInfo.toString());
+                Log.d(TAG, "projectInfo==>" + projectInfo);
                 if (projectInfo != null && projectInfo.getData() != null && projectInfo.getData().getDatas() != null) {
                     homeBinding.homeRy.setVisibility(View.VISIBLE);
-                    homeBinding.homeRy.setPullLoadMoreCompleted();
                     mProjectDatas.addAll(projectInfo.getData().getDatas());
                     mProjectAdapter.notifyDataSetChanged();
                 }
             }
         });
+    }
+
+    /**
+     * 没有数据时候的ui设置
+     */
+    private void noDataUiSetting() {
+        if (mProjectDatas.size() == 0) {
+            setNoDataViewVisible(true);
+            homeBinding.homeRy.setVisibility(View.GONE);
+        }
     }
 
 
@@ -91,11 +110,12 @@ public class ProjectFragment extends BaseHomeFragment implements PullLoadMoreRec
         num = 0;
         mProjectDatas.clear();
         homeBinding.homeRy.setOnPullLoadMoreListener(null);
+        homeBinding.homeRy.removeCallbacks(this);
     }
 
     @Override
     public void onChildItemClick(View root, int position) {
-        Log.d(TAG,"onChildItemClick position==>"+position);
+        Log.d(TAG, "onChildItemClick position==>" + position);
         if (mProjectDatas != null && mProjectDatas.size() > position) {
             UiUtils.transFragment(getActivity(), BaseUtils.TAG_WEBVIEW, MainActivity.class);
             PageChangeManger.getInstance().getListener().onPageChange(mProjectDatas.get(position).getProjectLink());
@@ -107,6 +127,14 @@ public class ProjectFragment extends BaseHomeFragment implements PullLoadMoreRec
     public void onNoDataClickCallBackByBaseHome() {
         setNoDataViewVisible(false);
         homeBinding.loading.setVisibility(View.VISIBLE);
+        homeBinding.homeRy.setVisibility(View.GONE);
+        mHomeViewModel.requestProjectData(num);
+    }
+
+    @Override
+    public void run() {
+        homeBinding.loading.setVisibility(View.VISIBLE);
+        homeBinding.homeRy.setVisibility(View.GONE);
         mHomeViewModel.requestProjectData(num);
     }
 }

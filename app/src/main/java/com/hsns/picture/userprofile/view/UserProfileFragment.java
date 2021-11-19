@@ -77,7 +77,7 @@ public class UserProfileFragment extends BaseFragment {
                 if (userProfileInfo.getErrorCode() == RetrofitConstants.ERROR_CODE_NOT_LOGIN) {
                     ToastUtils.showToast(PictureApplication.getApplication(), userProfileInfo.getErrorMsg());
                 } else if (userProfileInfo.getErrorCode() == RetrofitConstants.ERROR_CODE_SUCCESS) {
-                    Log.d(TAG, "userProfileInfo==>" + userProfileInfo.toString());
+                    Log.d(TAG, "userProfileInfo==>" + userProfileInfo);
                     updateView(userProfileInfo);
                 }
             }

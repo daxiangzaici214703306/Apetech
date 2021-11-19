@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             @Override
             public void onChanged(BaseBean<Object> objectBaseBean) {
                 if (objectBaseBean != null) {
-                    Log.d(TAG, "get logout data ==>" + objectBaseBean.toString());
+                    Log.d(TAG, "get logout data ==>" + objectBaseBean);
                     if (objectBaseBean.getErrorCode() == RetrofitConstants.ERROR_CODE_SUCCESS) {
                         doLogoutByCallback();
                     }

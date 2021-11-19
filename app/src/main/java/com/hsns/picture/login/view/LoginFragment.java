@@ -64,7 +64,7 @@ public class LoginFragment extends BaseFragment {
                     ToastUtils.showToast(getActivity(), R.string.login_fail);
                     return;
                 }
-                Log.d(TAG,"loginResultInfo==>"+loginResultInfo.toString());
+                Log.d(TAG,"loginResultInfo==>"+loginResultInfo);
                 if (loginResultInfo.getData()!=null&&loginResultInfo!=null&&loginResultInfo.getErrorCode()== RetrofitConstants.ERROR_CODE_SUCCESS) {
                     ToastUtils.showToast(getActivity(), R.string.login_success);
                     BaseUtils.isLoginSuccess = true;

@@ -50,7 +50,7 @@ public class RegisterFragment extends BaseFragment {
             @Override
             public void onChanged(final RegisterResultInfo registerResultInfo) {
                 if(registerResultInfo==null) return;
-                Log.d(TAG, "registerresultinfo==>" + registerResultInfo.toString());
+                Log.d(TAG, "registerresultinfo==>" + registerResultInfo);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

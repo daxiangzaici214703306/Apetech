@@ -41,6 +41,7 @@ public class UserProfileFragment extends BaseFragment {
         setUpDataListener();
         initData();
         backListener();
+        fragmentUserprofileBinding.comingCoinList.setOnClickListener(this);
     }
 
     private void initData() {
@@ -62,6 +63,9 @@ public class UserProfileFragment extends BaseFragment {
         switch (v.getId()) {
             case R.id.back:
                 UiUtils.transFragment(PictureApplication.getApplication(), BaseUtils.TAG_BACK, MainActivity.class);
+                break;
+            case R.id.coming_coin_list:
+                UiUtils.transFragment(PictureApplication.getApplication(), BaseUtils.TAG_COINRANKINFO, MainActivity.class);
                 break;
         }
     }

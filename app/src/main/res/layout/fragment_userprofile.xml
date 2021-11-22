@@ -176,6 +176,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/coming_coin_list"
                 android:text="@string/coming_coin_list"
                 android:textColor="@android:color/holo_blue_light"
                 android:textSize="20sp"

@@ -33,6 +33,7 @@ import com.hsns.picture.login.view.LoginFragment;
 import com.hsns.picture.main.viewmodel.MainViewModel;
 import com.hsns.picture.photos.view.PhotoFragment;
 import com.hsns.picture.register.view.RegisterFragment;
+import com.hsns.picture.userprofile.view.CoinRankFragment;
 import com.hsns.picture.userprofile.view.UserProfileFragment;
 import com.hsns.picture.webview.WebViewFragment;
 
@@ -47,6 +48,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private WebViewFragment mWebViewFragment;
     private NaviFragment mNaviFragment;
     private ProjectFragment mProjectFragment;
+    private CoinRankFragment mCoinRankFragment;
     private UserProfileFragment mUserProfileFragment;
     private TextView slideWelTex;
     private static final String TAG = "MainActivity";
@@ -80,6 +82,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mNaviFragment = new NaviFragment();
         mProjectFragment = new ProjectFragment();
         mUserProfileFragment = new UserProfileFragment();
+        mCoinRankFragment=new CoinRankFragment();
     }
 
     /**
@@ -251,6 +254,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case BaseUtils.TAG_WEBVIEW:
                 showFragment(R.id.ry_container, mWebViewFragment, BaseUtils.TAG_WEBVIEW);
                 activityMainBinding.mainBottomNav.setVisibility(View.GONE);
+                break;
+            case BaseUtils.TAG_COINRANKINFO:
+                showFragment(R.id.ry_container, mCoinRankFragment, BaseUtils.TAG_COINRANKINFO);
                 break;
         }
     }

@@ -4,10 +4,12 @@ import android.content.Context;
 
 import com.hsns.base.bean.BannerInfo;
 import com.hsns.base.bean.BaseBean;
+import com.hsns.base.bean.CoinRankInfo;
 import com.hsns.base.bean.HierarchyInfo;
 import com.hsns.base.bean.HomeInfo;
 import com.hsns.base.bean.LoginResultInfo;
 import com.hsns.base.bean.NaviInfo;
+import com.hsns.base.bean.PersonCoinInfo;
 import com.hsns.base.bean.ProjectInfo;
 import com.hsns.base.bean.RegisterInfo;
 import com.hsns.base.bean.RegisterResultInfo;
@@ -76,13 +78,13 @@ public class HttpManager {
     public synchronized void requestUserInfo(final UserInfo info, final LoginCallback loginCallback) {
         new BaseRequset<LoginResultInfo>().requestNet(service.login(info.getUsername(), info.getPassword()),
                 new BaseRequset.BaseListener<LoginResultInfo>() {
-            @Override
-            public void onResult(LoginResultInfo loginResultInfo) {
-                if (loginCallback != null) {
-                    loginCallback.onLoginCallback(loginResultInfo);
-                }
-            }
-        });
+                    @Override
+                    public void onResult(LoginResultInfo loginResultInfo) {
+                        if (loginCallback != null) {
+                            loginCallback.onLoginCallback(loginResultInfo);
+                        }
+                    }
+                });
     }
 
     /**
@@ -165,7 +167,8 @@ public class HttpManager {
 
     /**
      * 获取完整项目数据
-     * @param pageNum 第几页
+     *
+     * @param pageNum           第几页
      * @param mHomeDataCallback 数据回调
      */
     public synchronized void requestProjectInfo(int pageNum, final HomeDataCallback mHomeDataCallback) {
@@ -183,6 +186,7 @@ public class HttpManager {
 
     /**
      * 获取个信息数据
+     *
      * @param mUserProfileCallback 数据回调
      */
     public synchronized void requestUserProfileInfo(final UserProfileCallback mUserProfileCallback) {
@@ -229,6 +233,7 @@ public class HttpManager {
 
     /**
      * 退出登陆请求
+     *
      * @param mLogOutCallback 数据回调
      */
     public synchronized void requestLogout(final LogoutCallback mLogOutCallback) {
@@ -242,5 +247,37 @@ public class HttpManager {
         });
     }
 
+
+    /**
+     * 积分排名请求
+     *
+     * @param mUserProfileCallback 积分排名数据回调
+     */
+    public synchronized void requestCoinInfo(final int pageNum, final UserProfileCallback mUserProfileCallback) {
+        new BaseRequset<CoinRankInfo>().requestNet(service.getCoinRankInfo(pageNum), new BaseRequset.BaseListener<CoinRankInfo>() {
+            @Override
+            public void onResult(CoinRankInfo mCoinRankInfo) {
+                if (mUserProfileCallback != null) {
+                    mUserProfileCallback.onCoinRankCallback(mCoinRankInfo);
+                }
+            }
+        });
+    }
+
+    /**
+     * 个人积分排名请求
+     *
+     * @param mUserProfileCallback 个人积分排名数据回调
+     */
+    public synchronized void requestPersonCoinInfo(final int pageNum, final UserProfileCallback mUserProfileCallback) {
+        new BaseRequset<PersonCoinInfo>().requestNet(service.getPersonCoinInfo(pageNum), new BaseRequset.BaseListener<PersonCoinInfo>() {
+            @Override
+            public void onResult(PersonCoinInfo mPersonCoinInfo) {
+                if (mUserProfileCallback != null) {
+                    mUserProfileCallback.onPersonCoinInfoCallback(mPersonCoinInfo);
+                }
+            }
+        });
+    }
 
 }

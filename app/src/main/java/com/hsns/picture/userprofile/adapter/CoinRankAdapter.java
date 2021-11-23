@@ -1,9 +1,7 @@
-package com.hsns.picture.home.adapter;
+package com.hsns.picture.userprofile.adapter;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,6 +9,7 @@ import androidx.annotation.NonNull;
 import com.hsns.base.bean.CoinRankInfo;
 import com.hsns.picture.PictureApplication;
 import com.hsns.picture.R;
+import com.hsns.picture.home.adapter.BaseAdapter;
 
 import java.util.List;
 

@@ -18,9 +18,9 @@ import com.hsns.base.bean.BaseBean;
 import com.hsns.base.manager.PageChangeManger;
 import com.hsns.base.utils.SharePreUtils;
 import com.hsns.base.utils.ToastUtils;
+import com.hsns.base.utils.UiUtils;
 import com.hsns.base.view.BaseActivity;
 import com.hsns.base.utils.BaseUtils;
-import com.hsns.network.base.BaseObserver;
 import com.hsns.network.constant.RetrofitConstants;
 import com.hsns.picture.PictureApplication;
 import com.hsns.picture.R;
@@ -34,7 +34,8 @@ import com.hsns.picture.main.viewmodel.MainViewModel;
 import com.hsns.picture.photos.view.PhotoFragment;
 import com.hsns.picture.register.view.RegisterFragment;
 import com.hsns.picture.userprofile.view.CoinRankFragment;
-import com.hsns.picture.userprofile.view.UserProfileFragment;
+import com.hsns.picture.userprofile.view.PerCoinFragment;
+import com.hsns.picture.userprofile.view.UserProfileActivity;
 import com.hsns.picture.webview.WebViewFragment;
 
 
@@ -48,8 +49,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private WebViewFragment mWebViewFragment;
     private NaviFragment mNaviFragment;
     private ProjectFragment mProjectFragment;
-    private CoinRankFragment mCoinRankFragment;
-    private UserProfileFragment mUserProfileFragment;
     private TextView slideWelTex;
     private static final String TAG = "MainActivity";
     private String currentBottomTag = BaseUtils.TAG_HOME;
@@ -81,8 +80,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mWebViewFragment = new WebViewFragment();
         mNaviFragment = new NaviFragment();
         mProjectFragment = new ProjectFragment();
-        mUserProfileFragment = new UserProfileFragment();
-        mCoinRankFragment=new CoinRankFragment();
     }
 
     /**
@@ -173,11 +170,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
      */
     private void doLogoutByCallback() {
         ToastUtils.showToast(this, R.string.logoff_success);
-        slideWelTex.setText(getString(R.string.login));
         activityMainBinding.slideContainer.closeDrawers();
         SharePreUtils.clearLoginStatus(this);
         SharePreUtils.storeCookie(this, "");//清楚cookies
         BaseUtils.isLoginSuccess = false;
+        slideWelTex.setText(getString(R.string.no_login));
+        activityMainBinding.mainNav.getMenu().findItem(R.id.nav_logout).setVisible(false);
         tranFragment(BaseUtils.TAG_LOGIN);
     }
 
@@ -192,6 +190,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     /**
      * newintent的回调信息处理
+     *
      * @param intent 数据对象
      */
     private void tranFragmentByNewIntent(Intent intent) {
@@ -224,11 +223,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case BaseUtils.TAG_PHOTOS:
                 showFragment(R.id.ry_container, mPhotoFragment, BaseUtils.TAG_PHOTOS);
                 break;
-            case BaseUtils.TAG_USERPROFILE:
-                activityMainBinding.slideContainer.closeDrawers();
-                activityMainBinding.mainBottomNav.setVisibility(View.GONE);
-                showFragment(R.id.ry_container, mUserProfileFragment, BaseUtils.TAG_USERPROFILE);
-                break;
             case BaseUtils.TAG_SETTING:
                 break;
             case BaseUtils.TAG_REGISTER:
@@ -255,9 +249,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 showFragment(R.id.ry_container, mWebViewFragment, BaseUtils.TAG_WEBVIEW);
                 activityMainBinding.mainBottomNav.setVisibility(View.GONE);
                 break;
-            case BaseUtils.TAG_COINRANKINFO:
-                showFragment(R.id.ry_container, mCoinRankFragment, BaseUtils.TAG_COINRANKINFO);
-                break;
         }
     }
 
@@ -273,7 +264,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     tranFragment(BaseUtils.TAG_LOGIN);
                     return true;
                 }
-                tranFragment(BaseUtils.TAG_USERPROFILE);
+                UiUtils.transActivity(this, UserProfileActivity.class);
                 break;
             case R.id.nav_update:
                 ToastUtils.showToast(this, R.string.latest_version);

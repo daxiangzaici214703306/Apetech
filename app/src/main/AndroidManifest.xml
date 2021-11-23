@@ -25,7 +25,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".SplashActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -35,7 +36,17 @@
         <activity
             android:name=".main.view.MainActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".userprofile.view.UserProfileActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".userprofile.view.CoinActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

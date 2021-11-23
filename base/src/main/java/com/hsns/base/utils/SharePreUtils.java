@@ -94,6 +94,17 @@ public class SharePreUtils {
     }
 
     /**
+     * 判断新用户是否登录
+     * @param mContext 上下文
+     * @param curLoginUser 当前登录的用户
+     * @return
+     */
+    public static boolean isUserChanged(Context mContext,String curLoginUser){
+        if(curLoginUser==null) return false;
+        return curLoginUser.equals(getCurLoginInfo(mContext));
+    }
+
+    /**
      * 清除登录状态信息
      */
     public static void clearLoginStatus(Context mContext) {

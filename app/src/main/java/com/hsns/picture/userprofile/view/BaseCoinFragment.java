@@ -112,7 +112,7 @@ public abstract class BaseCoinFragment extends BaseFragment implements NoDataVie
         super.onClick(v);
         switch (v.getId()){
             case R.id.back:
-                UiUtils.transFragment(PictureApplication.getApplication(), BaseUtils.TAG_BACK, MainActivity.class);
+                getActivity().finish();
                 break;
         }
     }

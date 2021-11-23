@@ -60,10 +60,15 @@ public class WebViewFragment extends BaseFragment implements PageChangeListener 
         super.onClick(v);
         switch (v.getId()) {
             case R.id.back:
-                UiUtils.transFragment(PictureApplication.getApplication(), BaseUtils.TAG_BACK, MainActivity.class);
+                if ((mAgentWeb != null && !mAgentWeb.back()) || mAgentWeb == null) {
+                    UiUtils.transFragment(PictureApplication.getApplication(), BaseUtils.TAG_BACK, MainActivity.class);
+                } else {
+                    mAgentWeb.back();
+                }
                 break;
         }
     }
+
 
     /**
      * websetting设置

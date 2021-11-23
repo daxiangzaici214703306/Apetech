@@ -13,9 +13,10 @@ public class BaseUtils {
     public static final String TAG_SYSTEM = "system";
     public static final String TAG_WEBVIEW = "webview";
     public static final String TAG_COINRANKINFO = "coinrank";
+    public static final String TAG_PERCOININFO = "percoin";
     public static final String TAG_BACK = "back";
     //跳转fragment对应的tag值
-    public static final String TAG_FRAGMENT = "tag";
+    public static final String TAG_FRAGMENT = "tag_f";
     public static final String TAG_WEBVIEW_URL = "url";
     //MainActivity对应的action
     public static final String ACTION_MAIN = "android.intent.action.MAIN";

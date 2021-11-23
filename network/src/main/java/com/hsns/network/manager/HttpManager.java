@@ -1,6 +1,7 @@
 package com.hsns.network.manager;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.hsns.base.bean.BannerInfo;
 import com.hsns.base.bean.BaseBean;

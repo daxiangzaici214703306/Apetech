@@ -13,6 +13,16 @@ public class UiUtils {
         mContext.startActivity(intent);
     }
 
+    /**
+     * 跳转对应Activity的辅助方法
+     */
+    public static void transActivity(Context mContext,String tag,Class c) {
+        Intent intent = new Intent();
+        intent.setClass(mContext,c);
+        intent.putExtra(BaseUtils.TAG_FRAGMENT,tag);
+        mContext.startActivity(intent);
+    }
+
 
     /**
      * 跳转到对应fragement

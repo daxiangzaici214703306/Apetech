@@ -69,6 +69,7 @@ public class LoginFragment extends BaseFragment {
                     ToastUtils.showToast(getActivity(), R.string.login_success);
                     BaseUtils.isLoginSuccess = true;
                     SharePreUtils.updateLoginStatus(getActivity(), true);
+                    ((MainActivity)getActivity()).doLoginSuccess();
                     UiUtils.transFragment(getActivity(), BaseUtils.TAG_BACK, MainActivity.class);
                 } else {
                     ToastUtils.showToast(getActivity(), R.string.login_fail);

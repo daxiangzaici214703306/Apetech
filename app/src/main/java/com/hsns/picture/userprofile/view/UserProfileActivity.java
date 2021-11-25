@@ -3,11 +3,9 @@ package com.hsns.picture.userprofile.view;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.hsns.base.bean.UserProfileInfo;
 import com.hsns.base.utils.BaseUtils;
 import com.hsns.base.utils.ToastUtils;
@@ -17,7 +15,6 @@ import com.hsns.network.constant.RetrofitConstants;
 import com.hsns.picture.PictureApplication;
 import com.hsns.picture.R;
 import com.hsns.picture.databinding.ActivityUserprofileBinding;
-import com.hsns.picture.main.view.MainActivity;
 import com.hsns.picture.userprofile.viewmodel.UserProfileViewModel;
 
 public class UserProfileActivity extends BaseActivity {
@@ -36,8 +33,8 @@ public class UserProfileActivity extends BaseActivity {
         ViewModelProvider.AndroidViewModelFactory factory = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication());
         mUserProfileViewModel = new ViewModelProvider(this, factory).get(UserProfileViewModel.class);
         setUpDataListener();
-        initData();
         cusClickListener();
+        initData();
     }
 
     /**
@@ -110,8 +107,6 @@ public class UserProfileActivity extends BaseActivity {
                 updateUserInfoView(userInfo);
                 updateCoinInfoView(coinInfo);
             }
-
-
         }
     }
 

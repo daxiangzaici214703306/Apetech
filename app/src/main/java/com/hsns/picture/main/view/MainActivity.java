@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -15,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.hsns.base.bean.BaseBean;
+import com.hsns.base.listener.SlideHeaderCallback;
 import com.hsns.base.manager.PageChangeManger;
 import com.hsns.base.utils.SharePreUtils;
 import com.hsns.base.utils.ToastUtils;
@@ -33,13 +33,13 @@ import com.hsns.picture.login.view.LoginFragment;
 import com.hsns.picture.main.viewmodel.MainViewModel;
 import com.hsns.picture.photos.view.PhotoFragment;
 import com.hsns.picture.register.view.RegisterFragment;
-import com.hsns.picture.userprofile.view.CoinRankFragment;
-import com.hsns.picture.userprofile.view.PerCoinFragment;
 import com.hsns.picture.userprofile.view.UserProfileActivity;
 import com.hsns.picture.webview.WebViewFragment;
+import com.wildma.pictureselector.PictureSelector;
 
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener,
+        BottomNavigationView.OnNavigationItemSelectedListener, SlideHeaderCallback, Observer<BaseBean<Object>> {
     private ActivityMainBinding activityMainBinding;
     private LoginFragment mLoginFragment;
     private PhotoFragment mPhotoFragment;
@@ -49,10 +49,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private WebViewFragment mWebViewFragment;
     private NaviFragment mNaviFragment;
     private ProjectFragment mProjectFragment;
-    private TextView slideWelTex;
     private static final String TAG = "MainActivity";
     private String currentBottomTag = BaseUtils.TAG_HOME;
     private MainViewModel mMainViewModel;
+    private SlideHeaderLayout slideHeaderLayout;//侧滑栏头部的ui加载
 
     @Override
     public int getLayoutId() {
@@ -62,13 +62,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void initView() {
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        BaseUtils.isLoginSuccess = SharePreUtils.isLogin(PictureApplication.getApplication());
         initFragment();
-        PageChangeManger.getInstance().setPageChangeListener(mWebViewFragment);
         initSlideLayout();
         initFragmentLoad();
-        initLoginStatus();
         initViewModelAndDataListener();
-
     }
 
     private void initFragment() {
@@ -80,6 +78,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mWebViewFragment = new WebViewFragment();
         mNaviFragment = new NaviFragment();
         mProjectFragment = new ProjectFragment();
+        PageChangeManger.getInstance().setPageChangeListener(mWebViewFragment);
     }
 
     /**
@@ -88,37 +87,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void initViewModelAndDataListener() {
         ViewModelProvider.AndroidViewModelFactory factory = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication());
         mMainViewModel = new ViewModelProvider(this, factory).get(MainViewModel.class);
-        setDataListener();
+        mMainViewModel.getMainDatas().observe(this, this);
     }
 
-    private void setDataListener() {
-        mMainViewModel.getMainDatas().observe(this, new Observer<BaseBean<Object>>() {
-            @Override
-            public void onChanged(BaseBean<Object> objectBaseBean) {
-                if (objectBaseBean != null) {
-                    Log.d(TAG, "get logout data ==>" + objectBaseBean);
-                    if (objectBaseBean.getErrorCode() == RetrofitConstants.ERROR_CODE_SUCCESS) {
-                        doLogoutByCallback();
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * 初始化登陆状态
-     */
-    private void initLoginStatus() {
-        if (SharePreUtils.isLogin(PictureApplication.getApplication())) {
-            slideWelTex.setText(getString(R.string.welcome) + SharePreUtils.getCurLoginInfo(PictureApplication.getApplication()));
-            BaseUtils.isLoginSuccess = true;
-            activityMainBinding.mainNav.getMenu().findItem(R.id.nav_logout).setVisible(true);
-        } else {
-            slideWelTex.setText(getString(R.string.no_login));
-            BaseUtils.isLoginSuccess = false;
-            activityMainBinding.mainNav.getMenu().findItem(R.id.nav_logout).setVisible(false);
-        }
-    }
 
     /**
      * 初始化Fragment的加载
@@ -138,21 +109,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void initSlideLayout() {
         activityMainBinding.mainBottomNav.setOnNavigationItemSelectedListener(this);
         activityMainBinding.mainNav.setNavigationItemSelectedListener(this);
-        slideWelTex = (TextView) activityMainBinding.mainNav.getHeaderView(0).findViewById(R.id.text_welcome);
-        activityMainBinding.mainNav.getHeaderView(0).setOnClickListener(this);
+        slideHeaderLayout = new SlideHeaderLayout(this, activityMainBinding.mainNav);
+        activityMainBinding.mainNav.getMenu().findItem(R.id.nav_logout).setVisible(BaseUtils.isLoginSuccess);
     }
 
+
     @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        switch (v.getId()) {
-            case R.id.slide_layout:
-                if (!BaseUtils.isLoginSuccess) {
-                    tranFragment(BaseUtils.TAG_LOGIN);
-                }
-                break;
-        }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        slideHeaderLayout.onActivityResult(requestCode, resultCode, data);/*图片选择结果回调*/
     }
+
 
     /**
      * 注销操作
@@ -160,9 +127,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void doLogout() {
         if (BaseUtils.isLoginSuccess) {
             mMainViewModel.logout();
-        } else {
-            ToastUtils.showToast(this, R.string.no_login);
         }
+    }
+
+    /**
+     * 登陆成功操作
+     */
+    public void doLoginSuccess() {
+        slideHeaderLayout.setHeaderText();
+        slideHeaderLayout.initSavedImgData();
+        activityMainBinding.mainNav.getMenu().findItem(R.id.nav_logout).setVisible(true);
     }
 
     /**
@@ -171,11 +145,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void doLogoutByCallback() {
         ToastUtils.showToast(this, R.string.logoff_success);
         activityMainBinding.slideContainer.closeDrawers();
-        SharePreUtils.clearLoginStatus(this);
-        SharePreUtils.storeCookie(this, "");//清楚cookies
-        BaseUtils.isLoginSuccess = false;
-        slideWelTex.setText(getString(R.string.no_login));
         activityMainBinding.mainNav.getMenu().findItem(R.id.nav_logout).setVisible(false);
+        SharePreUtils.clearUserInfo(this);
+        BaseUtils.isLoginSuccess = false;
+        slideHeaderLayout.setHeaderText();
+        slideHeaderLayout.initSavedImgData();
         tranFragment(BaseUtils.TAG_LOGIN);
     }
 
@@ -183,7 +157,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Log.d(TAG, "onNewIntent");
-        initLoginStatus();
         tranFragmentByNewIntent(intent);
 
     }
@@ -288,4 +261,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
+    @Override
+    public void onSlideCallback(int type) {
+        switch (type) {
+            case SlideHeaderLayout.TYPE_TRANSLOGIN:
+                tranFragment(BaseUtils.TAG_LOGIN);
+                break;
+            case SlideHeaderLayout.TYPE_LOADIMG:
+                PictureSelector.create(MainActivity.this, PictureSelector.SELECT_REQUEST_CODE).selectPicture(true);
+                break;
+        }
+    }
+
+    @Override
+    public void onChanged(BaseBean<Object> objectBaseBean) {
+        Log.d(TAG, "get logout data ==>" + objectBaseBean);
+        if (objectBaseBean != null && objectBaseBean.getErrorCode() == RetrofitConstants.ERROR_CODE_SUCCESS) {
+            doLogoutByCallback();
+        }
+    }
 }

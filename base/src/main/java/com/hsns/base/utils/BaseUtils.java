@@ -31,5 +31,7 @@ public class BaseUtils {
     public static final String CURUSER="curUser";//SharePre当前登录的用户名
     public static final String CURPASSWORD="curPassword";//SharePre当前登录的用户密码
     public static final String COOKIE="cookie";//网络请求的cookies
+    public static final String IMGDATA="image";//图片路径
+    public static final String IMGCUT="iscut";//图片是否被裁减
 
 }

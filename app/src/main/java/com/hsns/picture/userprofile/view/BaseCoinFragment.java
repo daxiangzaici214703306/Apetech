@@ -1,11 +1,13 @@
 package com.hsns.picture.userprofile.view;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,12 +26,14 @@ import com.hsns.picture.userprofile.model.UserProfileModel;
 import com.hsns.picture.userprofile.viewmodel.UserProfileViewModel;
 
 
-public abstract class BaseCoinFragment extends BaseFragment implements NoDataView.NoDataClickCallBack,View.OnClickListener {
+public abstract class BaseCoinFragment extends BaseFragment implements NoDataView.NoDataClickCallBack, View.OnClickListener {
     public FragmentCoinrankBinding fragmentCoinrankBinding;
     public NoDataView mNoDataView;
     public UserProfileViewModel mUserProfileViewModel;
     private Handler mHandler = new Handler();
     private static final String TAG = "BaseCoinFragment";
+    private String tittle="";//标题
+
     @Override
     public int getLayoutId() {
         return R.layout.fragment_coinrank;
@@ -45,7 +49,7 @@ public abstract class BaseCoinFragment extends BaseFragment implements NoDataVie
     }
 
     private void initBackView() {
-       fragmentCoinrankBinding.back.setOnClickListener(this);
+        fragmentCoinrankBinding.back.setOnClickListener(this);
     }
 
     @Override
@@ -110,10 +114,31 @@ public abstract class BaseCoinFragment extends BaseFragment implements NoDataVie
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.back:
                 getActivity().finish();
                 break;
         }
+    }
+
+    /**
+     * 设置标题内容
+     *
+     * @param content 内容
+     */
+    public void setTittleContent(String content) {
+        this.tittle = content;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        fragmentCoinrankBinding.tittle.setText(tittle);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+//        if (!hidden) fragmentCoinrankBinding.tittle.setText(tittle);
     }
 }

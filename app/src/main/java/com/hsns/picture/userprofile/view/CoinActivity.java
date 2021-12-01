@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.hsns.base.utils.BaseUtils;
 import com.hsns.base.view.BaseActivity;
+import com.hsns.picture.PictureApplication;
 import com.hsns.picture.R;
 import com.hsns.picture.databinding.ActivityCoinBinding;
 
@@ -36,9 +37,11 @@ public class CoinActivity extends BaseActivity {
             case BaseUtils.TAG_HOME:
             case BaseUtils.TAG_COINRANKINFO:
                 showFragment(R.id.coin_content, mCoinRankFragment, BaseUtils.TAG_COINRANKINFO);
+                mCoinRankFragment.setTittleContent(PictureApplication.getApplication().getString(R.string.coincount_tittle));
                 break;
             case BaseUtils.TAG_PERCOININFO:
                 showFragment(R.id.coin_content, mPerCoinFragment, BaseUtils.TAG_PERCOININFO);
+                mPerCoinFragment.setTittleContent(PictureApplication.getApplication().getString(R.string.coin_list));
                 break;
         }
     }

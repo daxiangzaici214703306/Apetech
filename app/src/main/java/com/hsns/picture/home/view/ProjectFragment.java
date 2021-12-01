@@ -118,7 +118,9 @@ public class ProjectFragment extends BaseHomeFragment implements PullLoadMoreRec
         Log.d(TAG, "onChildItemClick position==>" + position);
         if (mProjectDatas != null && mProjectDatas.size() > position) {
             UiUtils.transFragment(getActivity(), BaseUtils.TAG_WEBVIEW, MainActivity.class);
-            PageChangeManger.getInstance().getListener().onPageChange(mProjectDatas.get(position).getProjectLink());
+            String link=mProjectDatas.get(position).getProjectLink();
+            String tittle=mProjectDatas.get(position).getTitle();
+            PageChangeManger.getInstance().getListener().onPageChange(link,tittle);
         }
     }
 

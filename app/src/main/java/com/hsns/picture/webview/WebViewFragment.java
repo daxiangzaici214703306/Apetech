@@ -34,6 +34,7 @@ public class WebViewFragment extends BaseFragment implements PageChangeListener 
     private AgentWeb mAgentWeb;
     private WebView mWebView;
     private String tempUrl;//判断是否url有变化
+    private String tittle = "";//标题
 
     @Override
     public int getLayoutId() {
@@ -53,18 +54,22 @@ public class WebViewFragment extends BaseFragment implements PageChangeListener 
         super.onActivityCreated(savedInstanceState);
         Log.d(TAG, "onActivityCreated");
         webViewSetting();
+        fragmentWebviewBinding.tittle.post(new Runnable() {
+            @Override
+            public void run() {
+                tittleSetting();
+            }
+        });
+
     }
+
 
     @Override
     public void onClick(View v) {
         super.onClick(v);
         switch (v.getId()) {
             case R.id.back:
-                if ((mAgentWeb != null && !mAgentWeb.back()) || mAgentWeb == null) {
-                    UiUtils.transFragment(PictureApplication.getApplication(), BaseUtils.TAG_BACK, MainActivity.class);
-                } else {
-                    mAgentWeb.back();
-                }
+                UiUtils.transFragment(PictureApplication.getApplication(), BaseUtils.TAG_BACK, MainActivity.class);
                 break;
         }
     }
@@ -78,6 +83,13 @@ public class WebViewFragment extends BaseFragment implements PageChangeListener 
             initAgentWeb();
             initWebSetting();
         }
+    }
+
+    /**
+     * 标题设置
+     */
+    private void tittleSetting() {
+        fragmentWebviewBinding.tittle.setText(tittle);
     }
 
 
@@ -125,9 +137,10 @@ public class WebViewFragment extends BaseFragment implements PageChangeListener 
 
 
     @Override
-    public void onPageChange(String url) {
-        Log.d(TAG, "onPageChange url==>" + url + " activity==>" + getActivity());
+    public void onPageChange(String url, String tittle) {
+        Log.d(TAG, "onPageChange url==>" + url + " activity==>" + getActivity() + " tittle==>" + tittle);
         this.url = url;
+        this.tittle = tittle;
     }
 
     @Override
@@ -159,6 +172,7 @@ public class WebViewFragment extends BaseFragment implements PageChangeListener 
         String blankUrl = "about:blank";
         doLoadUrlOperation(!hidden ? url : blankUrl);
         tempUrl = url;
+        tittleSetting();
     }
 
     /**

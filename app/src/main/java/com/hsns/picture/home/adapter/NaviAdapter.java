@@ -20,6 +20,7 @@ import com.hsns.base.utils.UiUtils;
 import com.hsns.picture.main.view.MainActivity;
 import com.hsns.picture.PictureApplication;
 import com.hsns.picture.R;
+
 import java.util.List;
 
 
@@ -50,14 +51,15 @@ public class NaviAdapter extends BaseAdapter<NaviInfo.Data, NaviAdapter.NaviHold
             SpannableStringBuilder childs = new SpannableStringBuilder();
             for (NaviInfo.Root root : articles) {
                 int val = childs.length();
-                childs.append(root.getTitle() + "/");
+                String itemTittle = root.getTitle();
+                childs.append(itemTittle + "/");
                 String link = root.getLink();
                 childs.setSpan(new ClickableSpan() {
                     @Override
                     public void onClick(View widget) {
                         Log.d(TAG, "onClick link==>" + link);
                         UiUtils.transFragment(PictureApplication.getApplication(), BaseUtils.TAG_WEBVIEW, MainActivity.class);
-                        PageChangeManger.getInstance().getListener().onPageChange(link);
+                        PageChangeManger.getInstance().getListener().onPageChange(link, itemTittle);
                     }
 
                     @Override

@@ -187,17 +187,27 @@ public class HomePageFragment extends BaseHomeFragment implements PullLoadMoreRe
     public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
         Log.d(TAG, "onItemClick position==>" + position);
         if (mHomeDatas != null && mHomeDatas.size() > position) {
-            UiUtils.transFragment(getActivity(), BaseUtils.TAG_WEBVIEW, MainActivity.class);
-            PageChangeManger.getInstance().getListener().onPageChange(mHomeDatas.get(position).getLink());
+            tranToWebView(mHomeDatas.get(position).getLink(), mHomeDatas.get(position).getTitle());
+
         }
+    }
+
+    /**
+     * 切换到WebView的操作
+     *
+     * @param link  链接
+     * @param title 标题
+     */
+    private void tranToWebView(String link, String title) {
+        UiUtils.transFragment(getActivity(), BaseUtils.TAG_WEBVIEW, MainActivity.class);
+        PageChangeManger.getInstance().getListener().onPageChange(link, title);
     }
 
 
     @Override
     public void onBannerItemClick(BGABanner banner, View itemView, @Nullable Object model, int position) {
         if (bannerInfos != null && bannerInfos.size() > position) {
-            UiUtils.transFragment(getActivity(), BaseUtils.TAG_WEBVIEW, MainActivity.class);
-            PageChangeManger.getInstance().getListener().onPageChange(bannerInfos.get(position).getUrl());
+            tranToWebView(bannerInfos.get(position).getUrl(), bannerInfos.get(position).getTitle());
         }
     }
 

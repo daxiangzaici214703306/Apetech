@@ -44,11 +44,12 @@
     <string name="usericon">用户头像:</string>
     <string name="admin">管理员:</string>
     <string name="coincount">总积分:</string>
+    <string name="coincount_tittle">总积分排名</string>
     <string name="coinlevel">等级:</string>
     <string name="coinrank">排名:</string>
     <string name="userinfo">用户信息</string>
     <string name="coininfo">积分信息</string>
-    <string name="coin_list">积分排名</string>
+    <string name="coin_list">个人积分排名</string>
     <string name="coming_coin_list">进入积分排名>></string>
     <string name="coming_my_coin_list">个入积分变化</string>
 

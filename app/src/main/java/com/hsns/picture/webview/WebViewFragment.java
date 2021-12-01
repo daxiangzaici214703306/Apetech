@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
@@ -101,7 +102,7 @@ public class WebViewFragment extends BaseFragment implements PageChangeListener 
                 .setAgentWebParent(fragmentWebviewBinding.webviewLayout, 0, new FrameLayout.LayoutParams(-1, -1))
                 .useDefaultIndicator(-1, 3)
                 .setWebViewClient(new CustomWebClient())
-                .setWebChromeClient(new WebChromeClient())////WebChromeClient主要辅助WebView处理Javascript的对话框、网站图标、网站title、加载进度等
+                .setWebChromeClient(mWebViewClient)////WebChromeClient主要辅助WebView处理Javascript的对话框、网站图标、网站title、加载进度等
                 .setSecurityType(AgentWeb.SecurityType.STRICT_CHECK)
                 .setMainFrameErrorView(R.layout.agentweb_error_page, -1)
                 .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK)
@@ -128,6 +129,19 @@ public class WebViewFragment extends BaseFragment implements PageChangeListener 
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
     }
+
+
+    /**
+     * 设置WebChromeClient
+     */
+    private WebChromeClient mWebViewClient=new WebChromeClient(){
+        @Override
+        public void onReceivedTitle(WebView view, String title) {
+            super.onReceivedTitle(view, title);
+            tittle=title;
+            tittleSetting();
+        }
+    };
 
 
     @Override
